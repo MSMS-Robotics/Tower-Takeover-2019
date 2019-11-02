@@ -62,7 +62,6 @@ void autonomous(void) {
 /*                                                                           */
 /*  You must modify the code to add your own robot specific commands here.   */
 /*---------------------------------------------------------------------------*/
-vex::directionType fwd = vex::directionType::fwd;
 void usercontrol(void) {
   // User control code here, inside the loop
   while (1) {
