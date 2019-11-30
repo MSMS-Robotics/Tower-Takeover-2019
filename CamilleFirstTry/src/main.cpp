@@ -6,12 +6,19 @@
 /*    Description:  Competition Template                                      */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
+#include "vex.h"
+#include "math.h"
 
 // ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Eyes                 vision        9               
+// RMotor               motor         1               
+// LMotor               motor         11              
+// LArmMotor            motor         20              
+// Controller1          controller                    
 // ---- END VEXCODE CONFIGURED DEVICES ----
-// Camille was here
 
-#include "vex.h"
 
 using namespace vex;
 
@@ -21,13 +28,20 @@ competition Competition;
 // define your global instances of motors and other devices here
 
 /*---------------------------------------------------------------------------*/
-/*                          Pre-Autonomous Functions                         */
-/*                                                                           */
-/*  You may want to perform some actions before the competition starts.      */
-/*  Do them in the following function.  You must return from this function   */
-/*  or the autonomous and usercontrol tasks will not be started.  This       */
-/*  function is only called once after the V5 has been powered on and        */
-/*  not every time that the robot is disabled.                               */
+//                         Functions
+
+// Makes the program go to sleep
+void Sleep (int time) {
+  vex::task::sleep(time);
+}
+
+void DriveForward (int distance, float wheelDiameter = 4, float speed = 50) {
+  float circumference = M_PI * wheelDiameter;
+  float degrees = circumference / 360;
+  LMotor.setVelocity(speed, pct);
+  
+}
+
 /*---------------------------------------------------------------------------*/
 
 void pre_auton(void) {
@@ -49,9 +63,35 @@ void pre_auton(void) {
 /*---------------------------------------------------------------------------*/
 
 void autonomous(void) {
-  // ..........................................................................
-  // Insert autonomous user code here.
-  // ..........................................................................
+LMotor.spin(vex::directionType::fwd, 50, pct);
+RMotor.spin(vex::directionType::fwd, 50, pct);
+Sleep(1000);
+LMotor.spin(vex::directionType::fwd, 50, pct);
+RMotor.spin(vex::directionType::rev, 50, pct);
+Sleep(550);
+LMotor.spin(vex::directionType::fwd, 50, pct);
+RMotor.spin(vex::directionType::fwd, 50, pct);
+Sleep(1000);
+LMotor.spin(vex::directionType::fwd, 50, pct);
+RMotor.spin(vex::directionType::rev, 50, pct);
+Sleep(550);
+LMotor.spin(vex::directionType::fwd, 50, pct);
+RMotor.spin(vex::directionType::fwd, 50, pct);
+Sleep(1000);
+LMotor.spin(vex::directionType::fwd, 50, pct);
+RMotor.spin(vex::directionType::rev, 50, pct);
+Sleep(550);
+LMotor.spin(vex::directionType::fwd, 50, pct);
+RMotor.spin(vex::directionType::fwd, 50, pct);
+Sleep(1000);
+LMotor.spin(vex::directionType::fwd, 50, pct);
+RMotor.spin(vex::directionType::rev, 50, pct);
+Sleep(550);
+LMotor.stop();
+RMotor.stop();
+
+
+
 }
 
 /*---------------------------------------------------------------------------*/
@@ -63,11 +103,24 @@ void autonomous(void) {
 /*                                                                           */
 /*  You must modify the code to add your own robot specific commands here.   */
 /*---------------------------------------------------------------------------*/
+
 void usercontrol(void) {
-  // User control code here, inside the loop
+  Brain.Screen.print("Not Gonna make it to dinner");  
   while (1) {
-    Left.spin(vex::directionType::fwd, 10, vex::velocityUnits::pct);
-    Right.spin(vex::directionType::fwd, 10, vex::velocityUnits::pct);
+    //drivecontrol set to joysticks
+    LMotor.spin(vex::directionType::fwd, Controller1.Axis3.value(), vex::velocityUnits::pct);
+    RMotor.spin(vex::directionType::fwd, Controller1.Axis2.value(), vex::velocityUnits::pct);
+
+      //sets the tail to d-pad controls left and right 
+    if (Controller1.ButtonRight.pressing()){
+      LArmMotor.spin(fwd, 50, pct);
+    }
+    else if (Controller1.ButtonLeft.pressing()) {
+      LArmMotor.spin(directionType::rev, 50, pct); 
+    }
+    else {
+     LArmMotor.stop(); 
+    }
     wait(20, msec); // Sleep the task for a short amount of time to
                     // prevent wasted resources.
   }
